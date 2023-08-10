@@ -2,13 +2,37 @@
 import { computed } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { useBebidasStore } from '../stores/bebidas';
+import { useNotificacionStore } from '../stores/notificaciones';
 
 const route = useRoute()
 const store = useBebidasStore()
+const storeNotificacion = useNotificacionStore()
 
 const paginaInicio = computed(() => route.name==='inicio')
 
 const handleSubmit = () => {
+
+  if(Object.values(store.busqueda).includes('')){
+    // storeNotificacion.texto = 'Todos los campos son obligatorios'
+    // storeNotificacion.mostrar = true
+    // storeNotificacion.error = true
+    
+    // Se puede usar $patch para escribir varios valores
+    storeNotificacion.$patch({
+      texto: 'Todos los campos son obligatorios',
+      mostrar: true,
+      error: true
+    })
+
+    // Se puede usar $state para escribir varios valores
+    // storeNotificacion.$state = {
+    //   texto: 'Todos los campos son obligatorios',
+    //   mostrar: true,
+    //   error: true
+    // }
+
+    return
+  }
 
   store.obtenerRecetas();
 }
@@ -24,11 +48,11 @@ const handleSubmit = () => {
             <img class="w-32" src="/img/logo.svg" alt="logotipo">
           </RouterLink>
         </div>
-        <nav class="flex gap-4">
+        <nav class="flex gap-4 text-white">
           <RouterLink
             :to="{name: 'inicio'}"
             active-class="text-orange-500"
-            class="text-white uppercase font-bold"
+            class="uppercase font-bold"
           >
             Inicio
           </RouterLink>
@@ -36,7 +60,7 @@ const handleSubmit = () => {
           <RouterLink
             :to="{name: 'favoritos'}"
             active-class="text-orange-500"
-            class="text-white uppercase font-bold"
+            class="uppercase font-bold"
           >
             Favoritos
           </RouterLink>
